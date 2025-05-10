@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Error as PrismaError } from "@/app/generated/prisma/client";
-import { ErrorsTable } from "@/components/errors-table";
+import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -105,5 +105,5 @@ const columns: ColumnDef<PrismaError>[] = [
 ];
 
 export default function ErrorsTableClient({ data }: { data: PrismaError[] }) {
-  return <ErrorsTable columns={columns} data={data} />;
+  return <DataTable columns={columns} data={data} searchFilter="message" />;
 }

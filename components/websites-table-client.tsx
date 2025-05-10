@@ -1,8 +1,11 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Site as PrismaSite, Error as PrismaError } from "@/lib/prisma/client";
-import { WebsitesTable } from "@/components/websites-table";
+import {
+  Site as PrismaSite,
+  Error as PrismaError,
+} from "@/app/generated/prisma";
+import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,6 +34,18 @@ const columns: ColumnDef<SiteWithErrors>[] = [
       <SortableTableColumnHeader column={column} title="Total errors" />
     ),
     accessorFn: (row) => row.errors?.length ?? 0,
+    cell: ({ getValue }) => getValue(),
+  },
+  {
+    id: "last60Minutes",
+    header: ({ column }) => (
+      <SortableTableColumnHeader column={column} title="Last 60 minutes" />
+    ),
+    accessorFn: (row) =>
+      row.errors?.filter(
+        (error: PrismaError) =>
+          new Date(error.timestamp) >= new Date(Date.now() - 60 * 60 * 1000)
+      ).length ?? 0,
     cell: ({ getValue }) => getValue(),
   },
   {
@@ -82,6 +97,10 @@ const columns: ColumnDef<SiteWithErrors>[] = [
   },
 ];
 
-export default function WebsitesTableClient({ data }: { data: PrismaSite[] }) {
-  return <WebsitesTable columns={columns} data={data} />;
+export default function WebsitesTableClient({
+  data,
+}: {
+  data: SiteWithErrors[];
+}) {
+  return <DataTable columns={columns} data={data} searchFilter="url" />;
 }

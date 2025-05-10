@@ -28,15 +28,17 @@ import { Input } from "@/components/ui/input";
 import { TablePagination } from "@/components/table-pagination";
 import { TableColumnToggler } from "./table-column-toggler";
 
-interface WebsitesTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchFilter: string;
 }
 
-export function WebsitesTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
-}: WebsitesTableProps<TData, TValue>) {
+  searchFilter,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -66,10 +68,12 @@ export function WebsitesTable<TData, TValue>({
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Input
-            placeholder="Filter by url..."
-            value={(table.getColumn("url")?.getFilterValue() as string) ?? ""}
+            placeholder={`Filter by ${searchFilter}...`}
+            value={
+              (table.getColumn(searchFilter)?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("url")?.setFilterValue(event.target.value)
+              table.getColumn(searchFilter)?.setFilterValue(event.target.value)
             }
             className="w-sm max-w-lg"
           />
