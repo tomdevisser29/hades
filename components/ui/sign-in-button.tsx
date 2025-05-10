@@ -6,7 +6,9 @@ export default function SignInButton() {
     <form
       action={async () => {
         "use server";
-        await signIn("google");
+        await signIn("google", {
+          redirectTo: "/dashboard",
+        });
       }}
     >
       <Button variant="outline" className="w-full" type="submit">

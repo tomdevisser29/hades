@@ -24,16 +24,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/table-pagination";
+import { TableColumnToggler } from "./table-column-toggler";
 
 interface ErrorsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -83,32 +76,7 @@ export function ErrorsTable<TData, TValue>({
             className="w-sm max-w-lg"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Toggle columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableColumnToggler table={table} />
       </div>
       <div className="rounded-md border">
         <Table>

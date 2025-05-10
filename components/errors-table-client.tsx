@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 import { SortableTableColumnHeader } from "@/components/sortable-table-column-header";
 
 const columns: ColumnDef<PrismaError>[] = [
@@ -28,6 +29,14 @@ const columns: ColumnDef<PrismaError>[] = [
   {
     accessorKey: "type",
     header: "Type",
+    cell: ({ row }) => {
+      const type = row.original.type;
+      return (
+        <Badge variant={type === "exception" ? "default" : "secondary"}>
+          {type}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "site",
@@ -58,8 +67,15 @@ const columns: ColumnDef<PrismaError>[] = [
       <SortableTableColumnHeader column={column} title="Timestamp" />
     ),
     cell: ({ row }) => {
-      const timestamp = new Date(row.original.timestamp);
-      return timestamp.toLocaleString();
+      const value = row.original.timestamp;
+      return (
+        <span suppressHydrationWarning>
+          {new Date(value).toLocaleString("nl-NL", {
+            dateStyle: "short",
+            timeStyle: "medium",
+          })}
+        </span>
+      );
     },
   },
   {
