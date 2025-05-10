@@ -18,17 +18,22 @@ export async function POST(req: NextRequest) {
       !body.wp_plugins ||
       !body.fingerprint
     ) {
-      console.log(body);
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
+    const site = await prisma.site.upsert({
+      where: { url: body.site },
+      update: {},
+      create: { url: body.site },
+    });
+
     const recentDuplicate = await prisma.error.findFirst({
       where: {
         fingerprint: body.fingerprint,
-        site: body.site,
+        siteId: site.id,
         timestamp: {
           gte: new Date(Date.now() - 5_000),
         },
@@ -47,13 +52,13 @@ export async function POST(req: NextRequest) {
         file: body.file,
         line: body.line,
         backtrace: body.backtrace,
-        timestamp: new Date(body.timestamp * 1000), // Convert Unix timestamp to JavaScript Date
-        site: body.site,
+        timestamp: new Date(body.timestamp * 1000),
         phpVersion: body.php_version,
         wpVersion: body.wp_version,
         wpTheme: body.wp_theme,
         wpPlugins: body.wp_plugins,
         fingerprint: body.fingerprint,
+        siteId: site.id,
       },
     });
 

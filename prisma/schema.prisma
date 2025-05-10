@@ -14,6 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Site {
+  id     String  @id @default(cuid())
+  url    String  @unique
+  errors Error[]
+}
+
 model Error {
   id          Int      @id @default(autoincrement())
   type        String
@@ -22,7 +28,6 @@ model Error {
   file        String
   line        Int
   timestamp   DateTime
-  site        String
   phpVersion  String
   wpVersion   String
   wpTheme     Json?
@@ -30,6 +35,8 @@ model Error {
   fingerprint String
   backtrace   Json?
   createdAt   DateTime @default(now())
+  siteId      String
+  site        Site     @relation(fields: [siteId], references: [id])
 
-  @@unique([fingerprint, timestamp, site])
+  @@unique([fingerprint, timestamp])
 }

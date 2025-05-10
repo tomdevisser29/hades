@@ -12,6 +12,9 @@ const breadcrumbs = [
 export default async function Page() {
   const data = await prisma.error.findMany({
     orderBy: { timestamp: "desc" },
+    include: {
+      site: true,
+    },
   });
 
   return (

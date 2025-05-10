@@ -1,6 +1,8 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import prisma from "@/lib/prisma";
+import WebsitesTableClient from "@/components/websites-table-client";
 
 const breadcrumbs = [
   { name: "Dashboard", href: "/dashboard" },
@@ -8,6 +10,13 @@ const breadcrumbs = [
 ];
 
 export default async function Page() {
+  const data = await prisma.site.findMany({
+    orderBy: { id: "desc" },
+    include: {
+      errors: true,
+    },
+  });
+
   return (
     <SidebarInset>
       <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -20,7 +29,9 @@ export default async function Page() {
           <Breadcrumbs items={breadcrumbs} />
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-4 p-4 pt-0"></main>
+      <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <WebsitesTableClient data={data} />
+      </main>
     </SidebarInset>
   );
 }

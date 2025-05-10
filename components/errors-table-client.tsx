@@ -39,7 +39,7 @@ const columns: ColumnDef<PrismaError>[] = [
     },
   },
   {
-    accessorKey: "site",
+    accessorKey: "site.url",
     header: "Site",
   },
   {
