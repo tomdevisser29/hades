@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Bug, Flame, LayoutDashboard } from "lucide-react";
+import {
+  BugIcon,
+  CodeSquareIcon,
+  Flame,
+  LayoutDashboardIcon,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -30,20 +35,19 @@ const data = {
   ],
   navMain: [
     {
-      title: "Overviews",
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: "Errors",
       url: "/dashboard/errors",
-      icon: Bug,
-      isActive: true,
-      items: [
-        {
-          title: "Errors",
-          url: "/dashboard/errors",
-        },
-        {
-          title: "Websites",
-          url: "/dashboard/websites",
-        },
-      ],
+      icon: BugIcon,
+    },
+    {
+      title: "Websites",
+      url: "/dashboard/websites",
+      icon: CodeSquareIcon,
     },
   ],
 };
