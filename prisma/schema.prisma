@@ -17,7 +17,7 @@ datasource db {
 model Error {
   id          Int      @id @default(autoincrement())
   type        String
-  errno       Int
+  errno       Int?
   message     String
   file        String
   line        Int
@@ -28,7 +28,7 @@ model Error {
   wpTheme     Json?
   wpPlugins   Json?
   fingerprint String
-  backtrace   Json
+  backtrace   Json?
   createdAt   DateTime @default(now())
 
   @@unique([fingerprint, timestamp, site])

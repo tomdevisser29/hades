@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
 
     if (
       !body.type ||
-      body.errno === undefined ||
       !body.message ||
       !body.file ||
       body.line === undefined ||
@@ -17,9 +16,9 @@ export async function POST(req: NextRequest) {
       !body.wp_version ||
       !body.wp_theme ||
       !body.wp_plugins ||
-      !body.fingerprint ||
-      !body.backtrace
+      !body.fingerprint
     ) {
+      console.log(body);
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }

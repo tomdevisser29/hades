@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Error" ALTER COLUMN "errno" DROP NOT NULL,
+ALTER COLUMN "backtrace" DROP NOT NULL;
