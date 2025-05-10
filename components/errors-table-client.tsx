@@ -13,21 +13,17 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { ArrowUpDown } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const columns: ColumnDef<PrismaError>[] = [
   {
     accessorKey: "id",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "ID",
   },
   {
     accessorKey: "type",
@@ -40,6 +36,21 @@ const columns: ColumnDef<PrismaError>[] = [
   {
     accessorKey: "message",
     header: "Message",
+    cell: ({ row }) => {
+      const msg = row.original.message;
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span>{msg.length > 40 ? msg.slice(0, 40) + "..." : msg}</span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{msg}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
   },
   {
     accessorKey: "timestamp",
@@ -53,6 +64,10 @@ const columns: ColumnDef<PrismaError>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      const timestamp = new Date(row.original.timestamp);
+      return timestamp.toLocaleString();
     },
   },
   {
