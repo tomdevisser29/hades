@@ -1,37 +1,12 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { ColumnDef } from "@tanstack/react-table";
-import { Error as PrismaError } from "@/app/generated/prisma/client";
 import prisma from "@/lib/prisma";
-import { ErrorsTable } from "@/components/errors-table";
+import ErrorsTableClient from "@/components/errors-table-client";
 
 const breadcrumbs = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Errors" },
-];
-
-const columns: ColumnDef<PrismaError>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "type",
-    header: "Type",
-  },
-  {
-    accessorKey: "site",
-    header: "Site",
-  },
-  {
-    accessorKey: "message",
-    header: "Message",
-  },
-  {
-    accessorKey: "timestamp",
-    header: "Timestamp",
-  },
 ];
 
 export default async function Page() {
@@ -52,7 +27,7 @@ export default async function Page() {
         </div>
       </header>
       <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <ErrorsTable columns={columns} data={data} />
+        <ErrorsTableClient data={data} />
       </main>
     </SidebarInset>
   );
