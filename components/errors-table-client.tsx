@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { ArrowUpDown } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { SortableTableColumnHeader } from "@/components/sortable-table-column-header";
 
 const columns: ColumnDef<PrismaError>[] = [
   {
@@ -54,17 +54,9 @@ const columns: ColumnDef<PrismaError>[] = [
   },
   {
     accessorKey: "timestamp",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Timestamp
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <SortableTableColumnHeader column={column} title="Timestamp" />
+    ),
     cell: ({ row }) => {
       const timestamp = new Date(row.original.timestamp);
       return timestamp.toLocaleString();

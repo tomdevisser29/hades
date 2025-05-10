@@ -8,6 +8,9 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  VisibilityState,
   getSortedRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
@@ -21,7 +24,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { TablePagination } from "@/components/table-pagination";
 
 interface ErrorsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,6 +45,11 @@ export function ErrorsTable<TData, TValue>({
   data,
 }: ErrorsTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
@@ -41,13 +58,58 @@ export function ErrorsTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
+      columnFilters,
+      columnVisibility,
     },
   });
 
   return (
     <>
+      <div className="flex justify-between items-center">
+        <div className="flex items-center">
+          <Input
+            placeholder="Filter by message..."
+            value={
+              (table.getColumn("message")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("message")?.setFilterValue(event.target.value)
+            }
+            className="w-sm max-w-lg"
+          />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Toggle columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -98,24 +160,7 @@ export function ErrorsTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+      <TablePagination table={table} />
     </>
   );
 }
