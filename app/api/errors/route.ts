@@ -25,9 +25,9 @@ export async function POST(req: NextRequest) {
     }
 
     const site = await prisma.site.upsert({
-      where: { url: body.site },
+      where: { url: String(body.site) },
       update: {},
-      create: { url: body.site },
+      create: { url: String(body.site) },
     });
 
     const recentDuplicate = await prisma.error.findFirst({

@@ -97,7 +97,11 @@ const columns: ColumnDef<PrismaError>[] = [
                 View error
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>View site</DropdownMenuItem>
+            <Link href={`/dashboard/websites/${error.siteId}`}>
+              <DropdownMenuItem className="hover:cursor-pointer">
+                View website
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuItem>Mark as resolved</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

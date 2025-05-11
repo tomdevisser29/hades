@@ -67,7 +67,7 @@ export default async function Page({
           <p className="">{error?.message}</p>
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-8 p-4">
+      <main className="flex flex-1 flex-col gap-4 p-4">
         <section className="flex gap-2">
           <Button size="lg">
             <CheckIcon />
@@ -87,7 +87,7 @@ export default async function Page({
               </div>
               {error?.siteId && (
                 <Button asChild variant="outline" size="sm">
-                  <Link href={`/dashboard/sites/${error.siteId}`}>
+                  <Link href={`/dashboard/websites/${error.siteId}`}>
                     View site in Hades
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

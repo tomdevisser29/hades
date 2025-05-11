@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Site {
-  id     String  @id @default(cuid())
+  id     Int     @id @default(autoincrement())
   url    String  @unique
   errors Error[]
 }
@@ -35,7 +35,7 @@ model Error {
   fingerprint String
   backtrace   Json?
   createdAt   DateTime @default(now())
-  siteId      String
+  siteId      Int
   site        Site     @relation(fields: [siteId], references: [id])
 
   @@unique([fingerprint, timestamp])
