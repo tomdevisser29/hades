@@ -11,6 +11,7 @@ import { auth } from "@/auth";
 import AssignToSite from "@/components/assign-to-site-button";
 import { redirect } from "next/navigation";
 import UserCard from "@/components/user-card";
+import LinkGitLabDialog from "@/components/link-gitlab-dialog";
 
 export default async function Page({
   params,
@@ -90,6 +91,10 @@ export default async function Page({
               siteId={parseInt(id)}
               userId={user.id}
               isAssigned={Boolean(site?.users.find((u) => u.id === user.id))}
+            />
+            <LinkGitLabDialog
+              siteId={id}
+              initialRepository={site?.gitlabRepository}
             />
             <WebsiteActionsDropdown />
           </div>

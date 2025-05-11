@@ -14,11 +14,12 @@ datasource db {
 }
 
 model Site {
-  id           Int      @id @default(autoincrement())
-  url          String   @unique
-  errors       Error[]
-  registeredAt DateTime @default(now())
-  users        User[]   @relation("SitesToUsers")
+  id               Int      @id @default(autoincrement())
+  url              String   @unique
+  errors           Error[]
+  registeredAt     DateTime @default(now())
+  users            User[]   @relation("SitesToUsers")
+  gitlabRepository String?
 }
 
 model Error {
