@@ -1,12 +1,21 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowRight, CheckIcon } from "lucide-react";
 
+import PluginOverview from "@/components/plugin-overview";
 import ErrorBacktrace from "@/components/error-backtrace";
 import ErrorActionsDropdown from "@/components/error-actions-dropdown";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import prisma from "@/lib/prisma";
-import { CheckIcon } from "lucide-react";
 
 function isThemeObject(
   value: unknown
@@ -31,6 +40,9 @@ export default async function Page({
     where: {
       id: parseInt(id),
     },
+    include: {
+      site: true,
+    },
   });
 
   const breadcrumbs = [
@@ -41,7 +53,7 @@ export default async function Page({
 
   return (
     <>
-      <header className="shrink-0 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+      <header className="shrink-0">
         <div className="flex items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator
@@ -64,32 +76,57 @@ export default async function Page({
           <ErrorActionsDropdown />
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm text-muted-foreground">
-          <div>
-            <strong className="text-foreground">PHP Version:</strong>{" "}
-            {error?.phpVersion}
-          </div>
-          <div>
-            <strong className="text-foreground">WP Version:</strong>{" "}
-            {error?.wpVersion}
-          </div>
-          <div>
-            <strong className="text-foreground">Theme:</strong>{" "}
-            {isThemeObject(error?.wpTheme)
-              ? `${error.wpTheme.name} (${error.wpTheme.version})`
-              : "Unknown"}
-          </div>
-          <div>
-            <strong className="text-foreground">Timestamp:</strong>{" "}
-            {error?.timestamp?.toLocaleString("nl-NL", {
-              dateStyle: "short",
-              timeStyle: "medium",
-            })}
-          </div>
+        <section>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div className="flex flex-col gap-1">
+                <CardTitle>Site information</CardTitle>
+                <CardDescription>
+                  At the time the error occured.
+                </CardDescription>
+              </div>
+              {error?.siteId && (
+                <Button asChild variant="outline" size="sm">
+                  <Link href={`/dashboard/sites/${error.siteId}`}>
+                    View site in Hades
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              )}
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-sm text-muted-foreground">
+              <div>
+                <strong className="text-foreground">Domain:</strong>{" "}
+                {error?.site.url}
+              </div>
+              <div>
+                <strong className="text-foreground">PHP Version:</strong>{" "}
+                {error?.phpVersion}
+              </div>
+              <div>
+                <strong className="text-foreground">WP Version:</strong>{" "}
+                {error?.wpVersion}
+              </div>
+              <div>
+                <strong className="text-foreground">Timestamp:</strong>{" "}
+                {error?.timestamp?.toLocaleString("nl-NL", {
+                  dateStyle: "short",
+                  timeStyle: "medium",
+                })}
+              </div>
+              <div>
+                <strong className="text-foreground">Theme:</strong>{" "}
+                {isThemeObject(error?.wpTheme)
+                  ? `${error.wpTheme.name} (${error.wpTheme.version})`
+                  : "Unknown"}
+              </div>
+              <PluginOverview plugins={error?.wpPlugins} />
+            </CardContent>
+          </Card>
         </section>
 
         <section>
-          <ErrorBacktrace backtrace={error?.backtrace} />
+          {error?.backtrace && <ErrorBacktrace backtrace={error?.backtrace} />}
         </section>
       </main>
     </>
