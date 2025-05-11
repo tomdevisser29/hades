@@ -1,7 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Site as PrismaSite, Error as PrismaError } from "@prisma/client";
+import {
+  Site as PrismaSite,
+  Error as PrismaError,
+  User as PrismaUser,
+} from "@prisma/client";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +19,12 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { SortableTableColumnHeader } from "@/components/sortable-table-column-header";
 
-type SiteWithErrors = PrismaSite & {
+type SiteWithUsers = PrismaSite & {
   errors: PrismaError[];
+  users: PrismaUser[];
 };
 
-const columns: ColumnDef<SiteWithErrors>[] = [
+const columns: ColumnDef<SiteWithUsers>[] = [
   {
     accessorKey: "url",
     header: ({ column }) => (
@@ -69,6 +75,28 @@ const columns: ColumnDef<SiteWithErrors>[] = [
     cell: ({ getValue }) => getValue(),
   },
   {
+    id: "assigned",
+    header: "Assigned",
+    cell: ({ row }) => {
+      const users = row.original.users;
+      if (!users || users.length === 0) {
+        return "-";
+      }
+      return (
+        <div className="flex -space-x-2">
+          {users.map((user) => (
+            <Avatar key={user.id} className="h-6 w-6 border-2 border-white">
+              <AvatarImage
+                src={user.image || "placeholder.jpg"}
+                alt={user.name || ""}
+              />
+            </Avatar>
+          ))}
+        </div>
+      );
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const site = row.original;
@@ -99,7 +127,7 @@ const columns: ColumnDef<SiteWithErrors>[] = [
 export default function WebsitesTableClient({
   data,
 }: {
-  data: SiteWithErrors[];
+  data: SiteWithUsers[];
 }) {
   return <DataTable columns={columns} data={data} searchFilter="url" />;
 }

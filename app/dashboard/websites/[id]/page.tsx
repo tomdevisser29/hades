@@ -6,13 +6,33 @@ import { Error as PrismaError } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import prisma from "@/lib/prisma";
+import WebsiteActionsDropdown from "@/components/website-actions-dropdown";
+import { auth } from "@/auth";
+import AssignToSite from "@/components/assign-to-site-button";
+import { redirect } from "next/navigation";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const session = await auth();
   const { id } = await params;
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+
+  if (!user?.id) {
+    redirect("/login");
+  }
 
   const site = await prisma.site.findUnique({
     where: {
@@ -20,6 +40,7 @@ export default async function Page({
     },
     include: {
       errors: true,
+      users: true,
     },
   });
 
@@ -61,7 +82,37 @@ export default async function Page({
           </p>
         </div>
       </header>
+
       <main className="flex flex-1 flex-col gap-8 p-4">
+        <section className="flex gap-4 items-center">
+          <div className="flex gap-2">
+            <AssignToSite
+              siteId={parseInt(id)}
+              userId={user.id}
+              isAssigned={Boolean(site?.users.find((u) => u.id === user.id))}
+            />
+            <WebsiteActionsDropdown />
+          </div>
+          <Separator orientation="vertical" />
+          <h2 className="font-semibold text-md">Assigned users</h2>
+          <div>
+            {site?.users.length ? (
+              site?.users.map((user) => {
+                return (
+                  <Avatar key={user.id} className="h-8 w-8 rounded-lg">
+                    <AvatarImage
+                      src={user.image || "placeholder.jpg"}
+                      alt={user.name || "Unknown user"}
+                    />
+                  </Avatar>
+                );
+              })
+            ) : (
+              <p className="text-muted-foreground">No users assigned</p>
+            )}
+          </div>
+        </section>
+
         <section className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold">Quick overview</h2>
           <div className="grid md:grid-cols-3 gap-2">

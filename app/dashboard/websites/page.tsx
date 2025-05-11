@@ -14,6 +14,7 @@ export default async function Page() {
     orderBy: { id: "desc" },
     include: {
       errors: true,
+      users: true,
     },
   });
 
