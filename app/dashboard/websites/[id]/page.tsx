@@ -1,7 +1,7 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import ErrorsTableClient from "@/components/errors-table-client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Error as PrismaError } from "@/app/generated/prisma";
+import { Error as PrismaError } from "@prisma/client";
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";

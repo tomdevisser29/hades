@@ -9,7 +9,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { JsonValue } from "@/app/generated/prisma/runtime/library";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 type TraceLine = {
   file?: string;

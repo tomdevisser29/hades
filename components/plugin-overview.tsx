@@ -8,7 +8,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { JsonValue } from "@/app/generated/prisma/runtime/library";
+import { JsonValue } from "@prisma/client/runtime/library";
 import { Badge } from "@/components/ui/badge";
 
 type Plugin = {
@@ -41,7 +41,6 @@ export default function PluginOverview({
           ([slug, data]) => ({ ...data, slug })
         )
       : [];
-  console.log(plugins);
 
   return (
     <Collapsible

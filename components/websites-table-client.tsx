@@ -1,10 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  Site as PrismaSite,
-  Error as PrismaError,
-} from "@/app/generated/prisma";
+import { Site as PrismaSite, Error as PrismaError } from "@prisma/client";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import {
