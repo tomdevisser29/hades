@@ -1,11 +1,11 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      {children}
+      <SidebarInset className="p-4">{children}</SidebarInset>
     </SidebarProvider>
   );
 }
