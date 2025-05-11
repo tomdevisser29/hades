@@ -8,7 +8,9 @@ import ErrorBacktrace from "@/components/error-backtrace";
 import ErrorActionsDropdown from "@/components/error-actions-dropdown";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
 function isThemeObject(
   value: unknown
@@ -28,6 +30,11 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
 
   const error = await prisma.error.findUnique({
     where: {
