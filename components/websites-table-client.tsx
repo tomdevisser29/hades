@@ -6,7 +6,6 @@ import {
   Error as PrismaError,
   User as PrismaUser,
 } from "@prisma/client";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +17,7 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { SortableTableColumnHeader } from "@/components/sortable-table-column-header";
+import UserCard from "./user-card";
 
 type SiteWithUsers = PrismaSite & {
   errors: PrismaError[];
@@ -85,12 +85,7 @@ const columns: ColumnDef<SiteWithUsers>[] = [
       return (
         <div className="flex -space-x-2">
           {users.map((user) => (
-            <Avatar key={user.id} className="h-6 w-6 border-2 border-white">
-              <AvatarImage
-                src={user.image || "placeholder.jpg"}
-                alt={user.name || ""}
-              />
-            </Avatar>
+            <UserCard key={user.id} user={user} />
           ))}
         </div>
       );

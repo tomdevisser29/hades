@@ -10,7 +10,7 @@ import WebsiteActionsDropdown from "@/components/website-actions-dropdown";
 import { auth } from "@/auth";
 import AssignToSite from "@/components/assign-to-site-button";
 import { redirect } from "next/navigation";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import UserCard from "@/components/user-card";
 
 export default async function Page({
   params,
@@ -98,17 +98,10 @@ export default async function Page({
           <div>
             {site?.users.length ? (
               site?.users.map((user) => {
-                return (
-                  <Avatar key={user.id} className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={user.image || "placeholder.jpg"}
-                      alt={user.name || "Unknown user"}
-                    />
-                  </Avatar>
-                );
+                return <UserCard key={user.id} user={user} />;
               })
             ) : (
-              <p className="text-muted-foreground">No users assigned</p>
+              <p className="">No users assigned</p>
             )}
           </div>
         </section>
