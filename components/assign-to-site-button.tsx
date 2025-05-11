@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UserPlusIcon, UserMinusIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AssignToSite({
   siteId,
@@ -24,9 +25,16 @@ export default function AssignToSite({
       method,
     });
     if (res.ok) {
+      toast("Successfully updated website", {
+        description: isAssigned
+          ? "You have unassigned yourself"
+          : "You have assigned yourself",
+      });
       router.refresh();
     } else {
-      console.error("Assignment toggle failed", await res.text());
+      const errorText = await res.text();
+      toast("Failed to toggle assignment: " + errorText);
+      console.error("Assignment toggle failed", errorText);
     }
   };
 

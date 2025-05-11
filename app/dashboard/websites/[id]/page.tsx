@@ -101,7 +101,7 @@ export default async function Page({
                 return <UserCard key={user.id} user={user} />;
               })
             ) : (
-              <p className="">No users assigned</p>
+              <p className="text-muted-foreground">No users assigned</p>
             )}
           </div>
         </section>
