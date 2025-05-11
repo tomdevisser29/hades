@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   BellOffIcon,
-  ChevronsUpDown,
   FileWarningIcon,
   MessageSquareShareIcon,
   MoreVerticalIcon,
