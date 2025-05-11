@@ -20,13 +20,16 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   gitlabRepository: z.string(),
+  serverPath: z.string(),
 });
 
 export default function GitLabRepositoryForm({
   initialRepository,
+  initialServerPath,
   siteId,
 }: {
   initialRepository: string;
+  initialServerPath: string;
   siteId: string;
 }) {
   const router = useRouter();
@@ -35,6 +38,7 @@ export default function GitLabRepositoryForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       gitlabRepository: initialRepository,
+      serverPath: initialServerPath,
     },
   });
 
@@ -80,6 +84,25 @@ export default function GitLabRepositoryForm({
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="serverPath"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Server path</FormLabel>
+              <FormControl>
+                <Input placeholder="/data/www/public/" type="text" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is the path that we will strip from the backtrace when
+                finding the code context in your repository.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit">
           {initialRepository
             ? "Update GitLab repository"

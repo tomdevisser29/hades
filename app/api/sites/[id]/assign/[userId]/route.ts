@@ -12,7 +12,7 @@ export async function POST(
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const userId = await params.userId;
+  const { userId } = await params;
   const siteId = await parseInt(params.id);
 
   try {

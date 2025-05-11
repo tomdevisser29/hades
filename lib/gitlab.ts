@@ -13,14 +13,12 @@ export async function fetchSnippet(
   projectId: number | string,
   token: string,
   filePath: string,
+  serverPath: string,
   line: number,
   context: number = 2,
   ref: string = "main"
 ): Promise<string> {
-  // Hardcoded local root to strip off absolute paths in backtraces, should be made dynamic
-  const LOCAL_ROOT = "/Users/tomdevisser/Local Sites/cerberus/app/public";
-
-  const relativePath = filePath.replace(`${LOCAL_ROOT}/`, "");
+  const relativePath = filePath.replace(`${serverPath}/`, "");
   const encodedPath = encodeURIComponent(relativePath);
 
   const projectParam =

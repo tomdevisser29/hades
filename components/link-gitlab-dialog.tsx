@@ -14,9 +14,11 @@ import GitLabRepositoryForm from "@/components/gitlab-repository-form";
 
 export default async function LinkGitLabDialog({
   initialRepository,
+  initialServerPath,
   siteId,
 }: {
   initialRepository: string | null | undefined;
+  initialServerPath: string | null | undefined;
   siteId: string;
 }) {
   const session = await auth();
@@ -75,6 +77,7 @@ export default async function LinkGitLabDialog({
             </DialogHeader>
             <GitLabRepositoryForm
               siteId={siteId}
+              initialServerPath={initialServerPath ?? ""}
               initialRepository={initialRepository ?? ""}
             />
           </DialogContent>

@@ -6,17 +6,17 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id } = await params;
   const session = await auth();
-  const siteId = await params.id;
 
   if (!session?.user?.email)
     return new NextResponse("Unauthorized", { status: 401 });
 
-  const { gitlabRepository } = await req.json();
+  const { gitlabRepository, serverPath } = await req.json();
 
   await prisma.site.update({
-    where: { id: parseInt(siteId) },
-    data: { gitlabRepository },
+    where: { id: parseInt(id) },
+    data: { gitlabRepository, serverPath },
   });
 
   return NextResponse.json({ success: true });

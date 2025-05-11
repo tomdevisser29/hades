@@ -94,6 +94,7 @@ export default async function Page({
             />
             <LinkGitLabDialog
               siteId={id}
+              initialServerPath={site?.serverPath}
               initialRepository={site?.gitlabRepository}
             />
             <WebsiteActionsDropdown />

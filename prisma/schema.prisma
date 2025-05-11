@@ -20,6 +20,7 @@ model Site {
   registeredAt     DateTime @default(now())
   users            User[]   @relation("SitesToUsers")
   gitlabRepository String?
+  serverPath       String?
 }
 
 model Error {

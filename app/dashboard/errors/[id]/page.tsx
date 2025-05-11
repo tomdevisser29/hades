@@ -128,7 +128,9 @@ export default async function Page({
         <Separator />
 
         <section>
-          {error?.backtrace && <ErrorBacktrace backtrace={error?.backtrace} />}
+          {error?.backtrace && (
+            <ErrorBacktrace site={error.site} backtrace={error?.backtrace} />
+          )}
         </section>
       </main>
     </>
