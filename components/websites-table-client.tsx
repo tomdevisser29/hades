@@ -86,9 +86,11 @@ const columns: ColumnDef<SiteWithErrors>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href={`/dashboard/websites/${site.id}`}>View site</Link>
-              </DropdownMenuItem>
+              <Link href={`/dashboard/websites/${site.id}`}>
+                <DropdownMenuItem className="hover:cursor-pointer">
+                  View site
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

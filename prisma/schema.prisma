@@ -15,9 +15,10 @@ datasource db {
 }
 
 model Site {
-  id     Int     @id @default(autoincrement())
-  url    String  @unique
-  errors Error[]
+  id           Int      @id @default(autoincrement())
+  url          String   @unique
+  errors       Error[]
+  registeredAt DateTime @default(now())
 }
 
 model Error {

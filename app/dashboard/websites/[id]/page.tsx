@@ -1,5 +1,7 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import ErrorsTableClient from "@/components/errors-table-client";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Error as PrismaError } from "@/app/generated/prisma";
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -15,6 +17,9 @@ export default async function Page({
   const site = await prisma.site.findUnique({
     where: {
       id: parseInt(id),
+    },
+    include: {
+      errors: true,
     },
   });
 
@@ -45,12 +50,54 @@ export default async function Page({
           />
           <Breadcrumbs items={breadcrumbs} />
         </div>
-        <div className="flex flex-col p-4">
-          <h1 className="font-bold text-xl">{site?.url}</h1>
+        <div className="flex flex-col p-4 gap-2">
+          <h1 className="font-bold text-4xl">{site?.url}</h1>
+          <p className="text-muted-foreground">
+            {"First registered at " +
+              site?.registeredAt?.toLocaleString("nl-NL", {
+                dateStyle: "short",
+                timeStyle: "medium",
+              })}
+          </p>
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-4 p-4">
-        <ErrorsTableClient data={errors} />
+      <main className="flex flex-1 flex-col gap-8 p-4">
+        <section className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold">Quick overview</h2>
+          <div className="grid md:grid-cols-3 gap-2">
+            <Card>
+              <CardHeader>Last 60 minutes</CardHeader>
+              <CardContent className="text-3xl font-semibold">
+                {errors?.filter(
+                  (error: PrismaError) =>
+                    new Date(error.timestamp) >=
+                    new Date(Date.now() - 60 * 60 * 1000)
+                ).length ?? 0}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>Fatal errors</CardHeader>
+              <CardContent className="text-3xl font-semibold">
+                {errors?.filter(
+                  (error: PrismaError) => error.type === "exception"
+                ).length ?? 0}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>Total errors</CardHeader>
+              <CardContent className="text-3xl font-semibold">
+                {errors?.length ?? 0}
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <Separator />
+
+        <section className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold">Error list</h2>
+          <ErrorsTableClient data={errors} />
+        </section>
       </main>
     </>
   );

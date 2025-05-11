@@ -38,7 +38,7 @@ export default function ErrorBacktrace({
     >
       <CollapsibleTrigger asChild>
         <div className="flex items-center justify-between gap-2 w-full">
-          <h2 className="text-md font-semibold">Error backtrace</h2>
+          <h2 className="text-2xl font-bold">Error backtrace</h2>
           <Button variant="outline" size="sm">
             <ChevronsUpDown className="h-4 w-4" />
             <span className="sr-only">Toggle</span>
