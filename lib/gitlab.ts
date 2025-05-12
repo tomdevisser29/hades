@@ -27,19 +27,22 @@ export async function fetchSnippet(
   const apiUrl =
     `https://gitlab.com/api/v4/projects/${projectParam}` +
     `/repository/files/${encodedPath}/raw?ref=${encodeURIComponent(ref)}`;
-  console.log(apiUrl);
+
   const response = await fetch(apiUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`GitLab API error ${response.status}: ${errorText}`);
   }
+
   const fileContent = await response.text();
   const lines = fileContent.split("\n");
   const start = Math.max(0, line - context - 1);
   const end = Math.min(lines.length, line + context);
+
   return lines.slice(start, end).join("\n");
 }
