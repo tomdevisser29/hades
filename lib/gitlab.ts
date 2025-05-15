@@ -46,3 +46,54 @@ export async function fetchSnippet(
 
   return lines.slice(start, end).join("\n");
 }
+
+interface GitLabCommit {
+  title: string;
+  author_name: string;
+  author_email: string;
+  created_at: string;
+  short_id: string;
+}
+
+export async function fetchRecentCommits(
+  projectId: number | string,
+  token: string,
+  count: number = 5,
+  ref: string = "main"
+): Promise<
+  {
+    title: string;
+    authorName: string;
+    authorEmail: string;
+    date: string;
+    shortId: string;
+  }[]
+> {
+  const projectParam =
+    typeof projectId === "string" ? encodeURIComponent(projectId) : projectId;
+
+  const apiUrl =
+    `https://gitlab.com/api/v4/projects/${projectParam}` +
+    `/repository/commits?ref_name=${encodeURIComponent(ref)}&per_page=${count}`;
+
+  const response = await fetch(apiUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GitLab API error ${response.status}: ${errorText}`);
+  }
+
+  const commits = await response.json();
+
+  return (commits as GitLabCommit[]).map((commit) => ({
+    title: commit.title,
+    authorName: commit.author_name,
+    authorEmail: commit.author_email,
+    date: commit.created_at,
+    shortId: commit.short_id,
+  }));
+}

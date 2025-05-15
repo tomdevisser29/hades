@@ -12,6 +12,7 @@ import AssignToSite from "@/components/assign-to-site-button";
 import { redirect } from "next/navigation";
 import UserCard from "@/components/user-card";
 import LinkGitLabDialog from "@/components/link-gitlab-dialog";
+import RecentCommits from "@/components/recent-commits";
 
 export default async function Page({
   params,
@@ -140,6 +141,21 @@ export default async function Page({
               </CardContent>
             </Card>
           </div>
+        </section>
+
+        <Separator />
+
+        <section>
+          <h2 className="text-2xl font-bold">Recent commits</h2>
+          <RecentCommits
+            site={{
+              id: site!.id,
+              url: site!.url,
+              registeredAt: site!.registeredAt,
+              gitlabRepository: site!.gitlabRepository,
+              serverPath: site!.serverPath,
+            }}
+          />
         </section>
 
         <Separator />
