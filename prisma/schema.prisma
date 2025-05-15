@@ -24,22 +24,23 @@ model Site {
 }
 
 model Error {
-  id          Int      @id @default(autoincrement())
-  type        String
-  errno       Int?
-  message     String
-  file        String
-  line        Int
-  timestamp   DateTime
-  phpVersion  String
-  wpVersion   String
-  wpTheme     Json?
-  wpPlugins   Json?
-  fingerprint String
-  backtrace   Json?
-  createdAt   DateTime @default(now())
-  siteId      Int
-  site        Site     @relation(fields: [siteId], references: [id])
+  id           Int      @id @default(autoincrement())
+  type         String
+  errno        Int?
+  message      String
+  file         String
+  line         Int
+  timestamp    DateTime
+  phpVersion   String
+  wpVersion    String
+  wpTheme      Json?
+  wpPlugins    Json?
+  fingerprint  String
+  backtrace    Json?
+  suggestedFix String?
+  createdAt    DateTime @default(now())
+  siteId       Int
+  site         Site     @relation(fields: [siteId], references: [id])
 
   @@unique([fingerprint, timestamp])
 }

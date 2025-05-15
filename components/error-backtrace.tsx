@@ -67,7 +67,7 @@ export default async function ErrorBacktrace({
       8
     );
   } else {
-    console.error("Invalid GitLab repository URL:", site.gitlabRepository);
+    console.error("Invalid or missing GitLab repository URL.");
   }
 
   return (

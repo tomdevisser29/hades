@@ -11,6 +11,8 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import SuggestedSolution from "@/components/suggested-solution";
+import RecentCommits from "@/components/recent-commits";
 
 function isThemeObject(
   value: unknown
@@ -127,10 +129,34 @@ export default async function Page({
 
         <Separator />
 
+        {error?.site && (
+          <section>
+            <h2 className="text-2xl font-bold">Recent commits</h2>
+            <RecentCommits
+              site={{
+                id: error?.site!.id,
+                url: error?.site!.url,
+                registeredAt: error?.site!.registeredAt,
+                gitlabRepository: error?.site!.gitlabRepository,
+                serverPath: error?.site!.serverPath,
+              }}
+            />
+          </section>
+        )}
+
+        <Separator />
+
         <section>
           {error?.backtrace && (
             <ErrorBacktrace site={error.site} backtrace={error?.backtrace} />
           )}
+        </section>
+
+        <Separator />
+
+        <section>
+          <h2 className="text-2xl font-bold">Suggested solution</h2>
+          <SuggestedSolution error={error} />
         </section>
       </main>
     </>

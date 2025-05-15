@@ -37,7 +37,7 @@ export default async function RecentCommits({ site }: { site: PrismaSite }) {
     const [, , repoPath] = match;
     commits = await fetchRecentCommits(repoPath, user?.gitlabToken);
   } else {
-    console.error("Invalid GitLab repository URL:", site.gitlabRepository);
+    console.error("Invalid or missing GitLab repository URL.");
   }
 
   const authorEmails = commits.map((c) => c.authorEmail);
